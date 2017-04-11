@@ -1,0 +1,13 @@
+C:\development\Devices\Dalsa\DalsaSpyderCamera\LsoViewer\obj\Debug\LsoViewer.csprojResolveAssemblyReference.cache
+C:\development\Devices\Dalsa\DalsaSpyderCamera\LsoViewer\obj\Debug\LsoViewer.LsoViewer.resources
+C:\development\Devices\Dalsa\DalsaSpyderCamera\LsoViewer\obj\Debug\LsoViewer.Properties.Resources.resources
+C:\development\Devices\Dalsa\DalsaSpyderCamera\LsoViewer\obj\Debug\LsoViewer.csproj.GenerateResource.Cache
+C:\development\Devices\Dalsa\DalsaSpyderCamera\LsoViewer\obj\Debug\LsoViewer.ImageBox.resources
+C:\development\Devices\Dalsa\DalsaSpyderCamera\LsoViewer\bin\Debug\LsoViewer.exe.config
+C:\development\Devices\Dalsa\DalsaSpyderCamera\LsoViewer\bin\Debug\LsoViewer.exe
+C:\development\Devices\Dalsa\DalsaSpyderCamera\LsoViewer\bin\Debug\LsoViewer.pdb
+C:\development\Devices\Dalsa\DalsaSpyderCamera\LsoViewer\bin\Debug\DALSA.SaperaLT.SapClassBasic.dll
+C:\development\Devices\Dalsa\DalsaSpyderCamera\LsoViewer\obj\Debug\LsoViewer.exe
+C:\development\Devices\Dalsa\DalsaSpyderCamera\LsoViewer\obj\Debug\LsoViewer.pdb
+C:\development\Devices\Dalsa\DalsaSpyderCamera\LsoViewer\bin\Debug\DalsaSpyderCamera.dll
+C:\development\Devices\Dalsa\DalsaSpyderCamera\LsoViewer\bin\Debug\DalsaSpyderCamera.pdb
