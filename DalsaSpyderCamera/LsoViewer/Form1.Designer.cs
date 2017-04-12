@@ -4,7 +4,8 @@ namespace Varocto.Cameras
     partial class LsoViewer
     {
 
-        private DALSA.SaperaLT.SapClassGui.ImageBox m_ImageBox;
+        private DALSA.SaperaLT.SapClassGui.ImageBox lsloImageBox;
+        private DALSA.SaperaLT.SapClassGui.ImageBox octImageBox;
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -34,34 +35,41 @@ namespace Varocto.Cameras
         private void InitializeComponent()
         {
             this.StatusLabelInfoTrash = new System.Windows.Forms.Label();
-            this.groupBox1_Acquisition = new System.Windows.Forms.GroupBox();
+            this.lsloGroupBox = new System.Windows.Forms.GroupBox();
             this.button_Freeze = new System.Windows.Forms.Button();
             this.button_Grab = new System.Windows.Forms.Button();
             this.button_Snap = new System.Windows.Forms.Button();
             this.StatusLabelInfo = new System.Windows.Forms.Label();
-            this.groupBox1_Acquisition.SuspendLayout();
+            this.octGroupBox = new System.Windows.Forms.GroupBox();
+            this.octFreezeButton = new System.Windows.Forms.Button();
+            this.octGrabButton = new System.Windows.Forms.Button();
+            this.octSnapButton = new System.Windows.Forms.Button();
+            this.octSignalStatus = new System.Windows.Forms.Label();
+            this.octFrameStatus = new System.Windows.Forms.Label();
+            this.lsloGroupBox.SuspendLayout();
+            this.octGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // StatusLabelInfoTrash
             // 
             this.StatusLabelInfoTrash.AutoSize = true;
-            this.StatusLabelInfoTrash.Location = new System.Drawing.Point(12, 493);
+            this.StatusLabelInfoTrash.Location = new System.Drawing.Point(24, 608);
             this.StatusLabelInfoTrash.Name = "StatusLabelInfoTrash";
             this.StatusLabelInfoTrash.Size = new System.Drawing.Size(69, 13);
             this.StatusLabelInfoTrash.TabIndex = 0;
             this.StatusLabelInfoTrash.Text = "Frame Status";
             // 
-            // groupBox1_Acquisition
+            // lsloGroupBox
             // 
-            this.groupBox1_Acquisition.Controls.Add(this.button_Freeze);
-            this.groupBox1_Acquisition.Controls.Add(this.button_Grab);
-            this.groupBox1_Acquisition.Controls.Add(this.button_Snap);
-            this.groupBox1_Acquisition.Location = new System.Drawing.Point(12, 286);
-            this.groupBox1_Acquisition.Name = "groupBox1_Acquisition";
-            this.groupBox1_Acquisition.Size = new System.Drawing.Size(143, 164);
-            this.groupBox1_Acquisition.TabIndex = 10;
-            this.groupBox1_Acquisition.TabStop = false;
-            this.groupBox1_Acquisition.Text = "Acquisition Control";
+            this.lsloGroupBox.Controls.Add(this.button_Freeze);
+            this.lsloGroupBox.Controls.Add(this.button_Grab);
+            this.lsloGroupBox.Controls.Add(this.button_Snap);
+            this.lsloGroupBox.Location = new System.Drawing.Point(24, 401);
+            this.lsloGroupBox.Name = "lsloGroupBox";
+            this.lsloGroupBox.Size = new System.Drawing.Size(143, 164);
+            this.lsloGroupBox.TabIndex = 10;
+            this.lsloGroupBox.TabStop = false;
+            this.lsloGroupBox.Text = "LSLO";
             // 
             // button_Freeze
             // 
@@ -98,23 +106,89 @@ namespace Varocto.Cameras
             // StatusLabelInfo
             // 
             this.StatusLabelInfo.AutoSize = true;
-            this.StatusLabelInfo.Location = new System.Drawing.Point(12, 467);
+            this.StatusLabelInfo.Location = new System.Drawing.Point(24, 582);
             this.StatusLabelInfo.Name = "StatusLabelInfo";
             this.StatusLabelInfo.Size = new System.Drawing.Size(69, 13);
             this.StatusLabelInfo.TabIndex = 11;
             this.StatusLabelInfo.Text = "Signal Status";
             // 
+            // octGroupBox
+            // 
+            this.octGroupBox.Controls.Add(this.octFreezeButton);
+            this.octGroupBox.Controls.Add(this.octGrabButton);
+            this.octGroupBox.Controls.Add(this.octSnapButton);
+            this.octGroupBox.Location = new System.Drawing.Point(1007, 401);
+            this.octGroupBox.Name = "octGroupBox";
+            this.octGroupBox.Size = new System.Drawing.Size(143, 164);
+            this.octGroupBox.TabIndex = 11;
+            this.octGroupBox.TabStop = false;
+            this.octGroupBox.Text = "OCT";
+            // 
+            // octFreezeButton
+            // 
+            this.octFreezeButton.Location = new System.Drawing.Point(20, 115);
+            this.octFreezeButton.Name = "octFreezeButton";
+            this.octFreezeButton.Size = new System.Drawing.Size(105, 24);
+            this.octFreezeButton.TabIndex = 2;
+            this.octFreezeButton.Text = "Freeze";
+            this.octFreezeButton.UseVisualStyleBackColor = true;
+            this.octFreezeButton.Click += new System.EventHandler(this.octFreezeButton_Click);
+            // 
+            // octGrabButton
+            // 
+            this.octGrabButton.Location = new System.Drawing.Point(20, 72);
+            this.octGrabButton.Name = "octGrabButton";
+            this.octGrabButton.Size = new System.Drawing.Size(105, 24);
+            this.octGrabButton.TabIndex = 1;
+            this.octGrabButton.Text = "Grab";
+            this.octGrabButton.UseVisualStyleBackColor = true;
+            this.octGrabButton.Click += new System.EventHandler(this.octGrabButton_Click);
+            // 
+            // octSnapButton
+            // 
+            this.octSnapButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.octSnapButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.octSnapButton.Location = new System.Drawing.Point(20, 29);
+            this.octSnapButton.Name = "octSnapButton";
+            this.octSnapButton.Size = new System.Drawing.Size(105, 25);
+            this.octSnapButton.TabIndex = 0;
+            this.octSnapButton.Text = "Snap";
+            this.octSnapButton.UseVisualStyleBackColor = true;
+            this.octSnapButton.Click += new System.EventHandler(this.octSnapButton_Click);
+            // 
+            // octSignalStatus
+            // 
+            this.octSignalStatus.AutoSize = true;
+            this.octSignalStatus.Location = new System.Drawing.Point(1004, 582);
+            this.octSignalStatus.Name = "octSignalStatus";
+            this.octSignalStatus.Size = new System.Drawing.Size(69, 13);
+            this.octSignalStatus.TabIndex = 13;
+            this.octSignalStatus.Text = "Signal Status";
+            // 
+            // octFrameStatus
+            // 
+            this.octFrameStatus.AutoSize = true;
+            this.octFrameStatus.Location = new System.Drawing.Point(1004, 608);
+            this.octFrameStatus.Name = "octFrameStatus";
+            this.octFrameStatus.Size = new System.Drawing.Size(69, 13);
+            this.octFrameStatus.TabIndex = 12;
+            this.octFrameStatus.Text = "Frame Status";
+            // 
             // LsoViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(877, 518);
+            this.ClientSize = new System.Drawing.Size(1955, 647);
+            this.Controls.Add(this.octSignalStatus);
+            this.Controls.Add(this.octFrameStatus);
+            this.Controls.Add(this.octGroupBox);
             this.Controls.Add(this.StatusLabelInfo);
-            this.Controls.Add(this.groupBox1_Acquisition);
+            this.Controls.Add(this.lsloGroupBox);
             this.Controls.Add(this.StatusLabelInfoTrash);
             this.Name = "LsoViewer";
             this.Text = "Form1";
-            this.groupBox1_Acquisition.ResumeLayout(false);
+            this.lsloGroupBox.ResumeLayout(false);
+            this.octGroupBox.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -125,11 +199,17 @@ namespace Varocto.Cameras
         #endregion
 
         private System.Windows.Forms.Label StatusLabelInfoTrash;
-        private System.Windows.Forms.GroupBox groupBox1_Acquisition;
+        private System.Windows.Forms.GroupBox lsloGroupBox;
         private System.Windows.Forms.Button button_Freeze;
         private System.Windows.Forms.Button button_Grab;
         private System.Windows.Forms.Button button_Snap;
         private System.Windows.Forms.Label StatusLabelInfo;
+        private System.Windows.Forms.GroupBox octGroupBox;
+        private System.Windows.Forms.Button octFreezeButton;
+        private System.Windows.Forms.Button octGrabButton;
+        private System.Windows.Forms.Button octSnapButton;
+        private System.Windows.Forms.Label octSignalStatus;
+        private System.Windows.Forms.Label octFrameStatus;
     }
 }
 

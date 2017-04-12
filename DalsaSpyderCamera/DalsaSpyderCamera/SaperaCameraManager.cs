@@ -22,54 +22,73 @@ namespace Varocto.Cameras
         /// </summary>
         /// 
         string lsoConfigFile = "C:\\development\\Devices\\Dalsa\\Camera Files\\T_Spyder_2_Default_Default.ccf";
-        string octConfigFile = "";
+        string octConfigFile = "C:\\development\\Devices\\Dalsa\\Camera Files\\OctoplusV1.ccf";
+
+        // TODO double-check to see if the frame grabber server is always Xtium-CL_MX4_1.
+        string cameraLinkServer = "Xtium-CL_MX4_1";
 
         private string lsoServerName;
         private string octServerName;
         private string lsoCameraName;
         private string octCameraName;
 
+        public DalsaCamera octCamera;
+        public DalsaCamera lsoCamera;
+
+
         private ServerCategory m_ServerCategory;
 
         public SaperaCameraManager()
         {
+
+            octCamera = new DalsaCamera(cameraLinkServer, octConfigFile, 1);
+            lsoCamera = new DalsaCamera(cameraLinkServer, lsoConfigFile, 0);
         }
 
         public void Initialize()
         {
-            InitServers();
-            InitCameras();
+
+            for (int i = 0; i < SapManager.GetServerCount(); i++)
+            {
+                // Does this server support "Acq" (frame-grabber) or "AcqDevice" (camera)?
+                lsoServerName = SapManager.GetServerName(i);
+            }
+
+            octCamera.Initialize();
+            lsoCamera.Initialize();
         }
 
         public bool CreateObjects()
         {
-            return SpyderCamera.Instance.CreateObjects();
+            return (octCamera.CreateObjects() && lsoCamera.CreateObjects());
+            //return lsoCamera.CreateObjects();
         }
-        private void InitServers()
-        {
+        //private void InitServers()
+        //{
 
-            for(int i = 0; i < SapManager.GetServerCount(); i++)
-	        {
-                // Does this server support "Acq" (frame-grabber) or "AcqDevice" (camera)?
-                 lsoServerName = SapManager.GetServerName(i);
-            }
+
+
+
+
            
-        }
+        //}
 
-        private void InitCameras()
-        {
-            int i = 0;
+        //private void InitCameras()
+        //{
+
+
+        //    //int i = 0;
            
-            // Add "Acq" resources (cameras) to combo
-            for (i = 0; i < SapManager.GetResourceCount(lsoServerName, SapManager.ResourceType.Acq); i++)
-            {
-                string resourceName = SapManager.GetResourceName(lsoServerName, SapManager.ResourceType.Acq, i);
-                if (resourceName == "CameraLink Full Mono")
-                    lsoCameraName = resourceName;
-            }
+        //    //// Add "Acq" resources (cameras) to combo
+        //    //for (i = 0; i < SapManager.GetResourceCount(lsoServerName, SapManager.ResourceType.Acq); i++)
+        //    //{
+        //    //    string resourceName = SapManager.GetResourceName(lsoServerName, SapManager.ResourceType.Acq, i);
+        //    //    if (resourceName == "CameraLink Full Mono")
+        //    //        lsoCameraName = resourceName;
+        //    //}
 
-            SpyderCamera.Instance.Initialize(lsoServerName, lsoConfigFile);
-         }
+        //    //SpyderCamera.Instance.Initialize(lsoServerName, lsoConfigFile);
+        // }
 
     }
 }

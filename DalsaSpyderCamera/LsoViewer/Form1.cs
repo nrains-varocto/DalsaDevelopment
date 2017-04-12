@@ -19,14 +19,15 @@ namespace Varocto.Cameras
 
         // Delegate to display number of frame acquired 
         // Delegate is needed because .NEt framework does not support  cross thread control modification
-        private delegate void DisplayFrameAcquired(int number, bool trash);
+        private delegate void DisplayOctFrameAcquired(int number, bool trash);
+        private delegate void DisplayLsoFrameAcquired(int number, bool trash);
 
         private void Frame_Captured(TransferNotifyEventArgs argsNotify)
         {
 
                // LsoViewerDlg.Invoke(new DisplayFrameAcquired(LsoViewerDlg.ShowFrameNumber), argsNotify.EventCount, false);
               //  ShowFrameNumber(argsNotify.EventCount, false);
-                m_ImageBox.View.Show();
+                lsloImageBox.View.Show();
 
 
         }
@@ -59,64 +60,93 @@ namespace Varocto.Cameras
             //  As a consequence, it is not possible to adjust the m_ImageBox properties
             //  automatically using the Designer anymore, this has to be done manually.
             // 
-            this.m_ImageBox =  new DALSA.SaperaLT.SapClassGui.ImageBox(); 
-            this.m_ImageBox.Location = new System.Drawing.Point(241, 4);
-            this.m_ImageBox.Name = "m_ImageBox";
+            this.lsloImageBox =  new DALSA.SaperaLT.SapClassGui.ImageBox(); 
+            this.lsloImageBox.Location = new System.Drawing.Point(241, 4);
+            this.lsloImageBox.Name = "lsloImageBox";
             // this.m_ImageBox.PixelValueDisplay = this.PixelDataValue;
-            this.m_ImageBox.Size = new System.Drawing.Size(386, 406);
-            this.m_ImageBox.SliderEnable = false;
-            this.m_ImageBox.SliderMaximum = 10;
-            this.m_ImageBox.SliderMinimum = 0;
-            this.m_ImageBox.SliderValue = 0;
-            this.m_ImageBox.SliderVisible = false;
-            this.m_ImageBox.TabIndex = 13;
-            this.m_ImageBox.TrackerEnable = false;
-            this.m_ImageBox.View = null;
-            this.Controls.Add(this.m_ImageBox);
+            this.lsloImageBox.Size = new System.Drawing.Size(386, 406);
+            this.lsloImageBox.SliderEnable = false;
+            this.lsloImageBox.SliderMaximum = 10;
+            this.lsloImageBox.SliderMinimum = 0;
+            this.lsloImageBox.SliderValue = 0;
+            this.lsloImageBox.SliderVisible = false;
+            this.lsloImageBox.TrackerEnable = false;
+            this.lsloImageBox.View = null;
+           //
+
+            this.octImageBox = new DALSA.SaperaLT.SapClassGui.ImageBox();
+            this.octImageBox.Location = new System.Drawing.Point(1171, 4);
+            this.octImageBox.Name = "octImageBox";
+            // this.m_ImageBox.PixelValueDisplay = this.PixelDataValue;
+            this.octImageBox.Size = new System.Drawing.Size(500, 500);
+            this.octImageBox.SliderEnable = false;
+            this.octImageBox.SliderMaximum = 10;
+            this.octImageBox.SliderMinimum = 0;
+            this.octImageBox.SliderValue = 0;
+            this.octImageBox.SliderVisible = false;
+            this.octImageBox.TrackerEnable = false;
+            this.octImageBox.View = null;
+            this.Controls.Add(this.octImageBox);
+            this.Controls.Add(this.lsloImageBox);
+
             saperaCameraManager = new SaperaCameraManager();
             saperaCameraManager.Initialize();
 
-            this.m_ImageBox.View = SpyderCamera.Instance.m_View;
+            this.lsloImageBox.View = saperaCameraManager.lsoCamera.m_View;
+            this.octImageBox.View = saperaCameraManager.octCamera.m_View;
 
             saperaCameraManager.CreateObjects();
-            SpyderCamera.Instance.FrameCaptured += new FrameCaptured(Frame_Captured);
-           
-            m_ImageBox.OnSize();
+            saperaCameraManager.lsoCamera.FrameCaptured += Frame_Captured;
+            saperaCameraManager.octCamera.FrameCaptured += OctCamera_FrameCaptured;
+
+            lsloImageBox.OnSize();
+            octImageBox.OnSize();
+
             EnableSignalStatus();
             UpdateControls();
         }
 
-        private void Instance_FrameCaptured(TransferNotifyEventArgs argsNotify)
+        private void OctCamera_FrameCaptured(TransferNotifyEventArgs argsNotify)
         {
-            LsoViewer lsoViewer = argsNotify.Context as LsoViewer;
-            // If grabbing in trash buffer, do not display the image, update the
-            // appropriate number of frames on the status bar instead
-            if (argsNotify.Trash)
-                lsoViewer.Invoke(new DisplayFrameAcquired(lsoViewer.ShowFrameNumber), argsNotify.EventCount, true);
-            // Refresh view
-            else
-            {
-                lsoViewer.Invoke(new DisplayFrameAcquired(lsoViewer.ShowFrameNumber), argsNotify.EventCount, false);
-                SpyderCamera.Instance.m_View.Show();
-            }
+            octImageBox.View.Show();
         }
+
+        //private void Instance_FrameCaptured(TransferNotifyEventArgs argsNotify)
+        //{
+        //    LsoViewer lsoViewer = argsNotify.Context as LsoViewer;
+        //    // If grabbing in trash buffer, do not display the image, update the
+        //    // appropriate number of frames on the status bar instead
+        //    if (argsNotify.Trash)
+        //        lsoViewer.Invoke(new DisplayFrameAcquired(lsoViewer.ShowFrameNumber), argsNotify.EventCount, true);
+        //    // Refresh view
+        //    else
+        //    {
+        //        lsoViewer.Invoke(new DisplayFrameAcquired(lsoViewer.ShowFrameNumber), argsNotify.EventCount, false);
+        //        saperaCameraManager.lsoCamera.m_View.Show();
+        //    }
+        //}
 
         private void EnableSignalStatus()
         {
-            bool status = SpyderCamera.Instance.IsSignalDetected();
+            bool status = saperaCameraManager.lsoCamera.IsSignalDetected();
             if (status == false)
                 StatusLabelInfo.Text = "Online... No camera signal detected";
             else
                 StatusLabelInfo.Text = "Online... Camera signal detected";
+            status = saperaCameraManager.octCamera.IsSignalDetected();
+            if (status == false)
+                octSignalStatus.Text = "Online... No camera signal detected";
+            else
+                octSignalStatus.Text = "Online... Camera signal detected";
         }
 
         private void button_Snap_Click(object sender, EventArgs e)
         {
-            AbortDlg abort = new AbortDlg(SpyderCamera.Instance.m_Xfer);
-            if (SpyderCamera.Instance.m_Xfer.Snap())
+            AbortDlg abort = new AbortDlg(saperaCameraManager.lsoCamera.m_Xfer);
+            if (saperaCameraManager.lsoCamera.m_Xfer.Snap())
             {
                 if (abort.ShowDialog() != DialogResult.OK)
-                    SpyderCamera.Instance.m_Xfer.Abort();
+                    saperaCameraManager.lsoCamera.m_Xfer.Abort();
                 UpdateControls();
             }
         }
@@ -126,9 +156,13 @@ namespace Varocto.Cameras
         // Updates the menu items enabling/disabling the proper items depending on the state of the application
         void UpdateControls()
         {
-            bool bAcqNoGrab = (SpyderCamera.Instance.m_Xfer != null) && (SpyderCamera.Instance.m_Xfer.Grabbing == false);
-            bool bAcqGrab = (SpyderCamera.Instance.m_Xfer != null) && (SpyderCamera.Instance.m_Xfer.Grabbing == true);
-            bool bNoGrab = (SpyderCamera.Instance.m_Xfer == null) || (SpyderCamera.Instance.m_Xfer.Grabbing == false);
+            bool bLsoAcqNoGrab = (saperaCameraManager.lsoCamera.m_Xfer != null) && (saperaCameraManager.lsoCamera.m_Xfer.Grabbing == false);
+            bool bLsoAcqGrab = (saperaCameraManager.lsoCamera.m_Xfer != null) && (saperaCameraManager.lsoCamera.m_Xfer.Grabbing == true);
+            bool bLsoNoGrab = (saperaCameraManager.lsoCamera.m_Xfer == null) || (saperaCameraManager.lsoCamera.m_Xfer.Grabbing == false);
+
+            bool bOctAcqNoGrab = (saperaCameraManager.octCamera.m_Xfer != null) && (saperaCameraManager.octCamera.m_Xfer.Grabbing == false);
+            bool bOctAcqGrab = (saperaCameraManager.octCamera.m_Xfer != null) && (saperaCameraManager.octCamera.m_Xfer.Grabbing == true);
+            bool bOctNoGrab = (saperaCameraManager.octCamera.m_Xfer == null) || (saperaCameraManager.octCamera.m_Xfer.Grabbing == false);
 
             //// Acquisition Control
             //button_Grab.Enabled = bAcqNoGrab && m_online;
@@ -136,9 +170,13 @@ namespace Varocto.Cameras
             //button_Freeze.Enabled = bAcqGrab && m_online;
 
             // Acquisition Control
-            button_Grab.Enabled = bAcqNoGrab;
-            button_Snap.Enabled = bAcqNoGrab;
-            button_Freeze.Enabled = bAcqGrab;
+            button_Grab.Enabled = bLsoAcqNoGrab;
+            button_Snap.Enabled = bLsoAcqNoGrab;
+            button_Freeze.Enabled = bLsoAcqGrab;
+
+            octGrabButton.Enabled = bOctAcqNoGrab;
+            octSnapButton.Enabled = bOctAcqNoGrab;
+            octFreezeButton.Enabled = bOctAcqGrab;
 
             //// File Options
             //button_New.Enabled = bNoGrab;
@@ -152,17 +190,47 @@ namespace Varocto.Cameras
         private void button_Grab_Click_1(object sender, EventArgs e)
         {
             StatusLabelInfoTrash.Text = "";
-            if (SpyderCamera.Instance.m_Xfer.Grab())
+            if (saperaCameraManager.lsoCamera.m_Xfer.Grab())
                 UpdateControls();
         }
 
         private void button_Freeze_Click_1(object sender, EventArgs e)
         {
-            AbortDlg abort = new AbortDlg(SpyderCamera.Instance.m_Xfer);
-            if (SpyderCamera.Instance.m_Xfer.Freeze())
+            AbortDlg abort = new AbortDlg(saperaCameraManager.lsoCamera.m_Xfer);
+            if (saperaCameraManager.lsoCamera.m_Xfer.Freeze())
             {
                 if (abort.ShowDialog() != DialogResult.OK)
-                    SpyderCamera.Instance.m_Xfer.Abort();
+                    saperaCameraManager.lsoCamera.m_Xfer.Abort();
+                UpdateControls();
+            }
+        }
+
+        private void octSnapButton_Click(object sender, EventArgs e)
+        {
+            AbortDlg abort = new AbortDlg(saperaCameraManager.octCamera.m_Xfer);
+            if (saperaCameraManager.octCamera.m_Xfer.Snap())
+            {
+                if (abort.ShowDialog() != DialogResult.OK)
+                    saperaCameraManager.octCamera.m_Xfer.Abort();
+                UpdateControls();
+            }
+
+        }
+
+        private void octGrabButton_Click(object sender, EventArgs e)
+        {
+            StatusLabelInfoTrash.Text = "";
+            if (saperaCameraManager.octCamera.m_Xfer.Grab())
+                UpdateControls();
+        }
+
+        private void octFreezeButton_Click(object sender, EventArgs e)
+        {
+            AbortDlg abort = new AbortDlg(saperaCameraManager.octCamera.m_Xfer);
+            if (saperaCameraManager.octCamera.m_Xfer.Freeze())
+            {
+                if (abort.ShowDialog() != DialogResult.OK)
+                    saperaCameraManager.octCamera.m_Xfer.Abort();
                 UpdateControls();
             }
         }

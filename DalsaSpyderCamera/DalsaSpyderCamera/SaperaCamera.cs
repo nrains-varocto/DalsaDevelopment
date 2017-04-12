@@ -14,9 +14,9 @@ namespace Varocto.Cameras
     public delegate void FrameCaptured(TransferNotifyEventArgs argsNotify);
     public delegate void GetSignalStatusEventHandler(SignalNotifyEventArgs argsSignal);
 
-    public class SpyderCamera
+    public class DalsaCamera
     {
-        private static SpyderCamera instance;
+ 
 
         //DalsaSapera support
         private SapAcquisition m_Acquisition;
@@ -29,48 +29,49 @@ namespace Varocto.Cameras
         private SapLocation m_ServerLocation;
         private string m_ConfigFileName;
         private string m_ServerName;
-        private int resourceIndex = 0;
+  
 
         // delegates
         public event FrameCaptured FrameCaptured;
         public event GetSignalStatusEventHandler SignalStatus;
 
         //thread safe implementation
-        private static readonly object padlock = new object();  
-        private SpyderCamera()
+        private  readonly object padlock = new object();
+
+        public DalsaCamera(string ServerName, string ConfigFile, int ResourceIndex)
         {
-
-            
-        }
-
-
-        public static SpyderCamera Instance
-        {
-            get
-            {
-                lock (padlock)
-                {
-                    if (SpyderCamera.instance == null)
-                    {
-                        instance = new SpyderCamera();
-                    }
-                    return instance;
-                }
-            }
-        }
-
-        // Call Create method  
-        public bool Initialize(string ServerName, string ConfigFile)
-        {
-
             if (!String.IsNullOrEmpty(ServerName) && !(String.IsNullOrEmpty(ConfigFile)))
             {
                 m_ServerName = ServerName;
                 m_ConfigFileName = ConfigFile;
-                m_ServerLocation = new SapLocation(ServerName, resourceIndex);
+                m_ServerLocation = new SapLocation(ServerName, ResourceIndex);
             }
             else
                 throw new SaperaCameraException("No configuration file");
+
+        }
+
+
+        //public SpyderCamera Instance
+        //{
+        //    get
+        //    {
+        //        lock (padlock)
+        //        {
+        //            if (SpyderCamera.instance == null)
+        //            {
+        //                instance = new SpyderCamera();
+        //            }
+        //            return instance;
+        //        }
+        //    }
+        //}
+
+        // Call Create method  
+        public bool Initialize()
+        {
+
+
 
             // define on-line object
             m_Acquisition = new SapAcquisition(m_ServerLocation, m_ConfigFileName);
@@ -171,11 +172,11 @@ namespace Varocto.Cameras
         }
 
 
-        static void XferNotify(object sender, SapXferNotifyEventArgs argsNotify)
+        void XferNotify(object sender, SapXferNotifyEventArgs argsNotify)
         {
             TransferNotifyEventArgs transferNotifyEventArgs = new TransferNotifyEventArgs(argsNotify);
 
-            instance.FrameCaptured?.Invoke(transferNotifyEventArgs);
+             FrameCaptured?.Invoke(transferNotifyEventArgs);
           //  instance.FrameCaptured?.Invoke(new TransferNotifyEventArgs(argsNotify));
 
             //GrabDemoDlg GrabDlg = argsNotify.Context as GrabDemoDlg;
@@ -192,9 +193,9 @@ namespace Varocto.Cameras
         }
 
 
-        static void GetSignalStatus(object sender, SapSignalNotifyEventArgs argsSignal)
+        void GetSignalStatus(object sender, SapSignalNotifyEventArgs argsSignal)
         {
-            instance.SignalStatus?.Invoke(new SignalNotifyEventArgs(argsSignal));
+            SignalStatus?.Invoke(new SignalNotifyEventArgs(argsSignal));
             ////GrabDemoDlg GrabDlg = argsSignal.Context as GrabDemoDlg;
             //SapAcquisition.AcqSignalStatus signalStatus = argsSignal.SignalStatus;
 
