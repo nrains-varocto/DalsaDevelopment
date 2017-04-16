@@ -68,10 +68,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DalsaEnums.cs" />
-    <Compile Include="SaperaCamera.cs" />
+    <Compile Include="ICameraLinkGenICamera.cs" />
+    <Compile Include="OctoplusCamera.cs" />
+    <Compile Include="OctoplusCommands.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SaperaCameraException.cs" />
     <Compile Include="SaperaCameraManager.cs" />
+    <Compile Include="CameraLinkGenICamera.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

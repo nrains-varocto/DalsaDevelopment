@@ -64,7 +64,7 @@ namespace Varocto.Cameras
             this.lsloImageBox.Location = new System.Drawing.Point(241, 4);
             this.lsloImageBox.Name = "lsloImageBox";
             // this.m_ImageBox.PixelValueDisplay = this.PixelDataValue;
-            this.lsloImageBox.Size = new System.Drawing.Size(386, 406);
+            this.lsloImageBox.Size = new System.Drawing.Size(1024, 1024);
             this.lsloImageBox.SliderEnable = false;
             this.lsloImageBox.SliderMaximum = 10;
             this.lsloImageBox.SliderMinimum = 0;
@@ -75,10 +75,10 @@ namespace Varocto.Cameras
            //
 
             this.octImageBox = new DALSA.SaperaLT.SapClassGui.ImageBox();
-            this.octImageBox.Location = new System.Drawing.Point(1171, 4);
+            this.octImageBox.Location = new System.Drawing.Point(1506, 4);
             this.octImageBox.Name = "octImageBox";
             // this.m_ImageBox.PixelValueDisplay = this.PixelDataValue;
-            this.octImageBox.Size = new System.Drawing.Size(500, 500);
+            this.octImageBox.Size = new System.Drawing.Size(1024, 1024);
             this.octImageBox.SliderEnable = false;
             this.octImageBox.SliderMaximum = 10;
             this.octImageBox.SliderMinimum = 0;
@@ -96,6 +96,9 @@ namespace Varocto.Cameras
             this.octImageBox.View = saperaCameraManager.octCamera.m_View;
 
             saperaCameraManager.CreateObjects();
+            saperaCameraManager.OpenSerialConnections();
+
+            saperaCameraManager.octCamera.EnableTestPattern(true);
             saperaCameraManager.lsoCamera.FrameCaptured += Frame_Captured;
             saperaCameraManager.octCamera.FrameCaptured += OctCamera_FrameCaptured;
 
@@ -143,7 +146,7 @@ namespace Varocto.Cameras
         private void button_Snap_Click(object sender, EventArgs e)
         {
             AbortDlg abort = new AbortDlg(saperaCameraManager.lsoCamera.m_Xfer);
-            if (saperaCameraManager.lsoCamera.m_Xfer.Snap())
+            if (saperaCameraManager.lsoCamera.Snap())
             {
                 if (abort.ShowDialog() != DialogResult.OK)
                     saperaCameraManager.lsoCamera.m_Xfer.Abort();
@@ -156,13 +159,13 @@ namespace Varocto.Cameras
         // Updates the menu items enabling/disabling the proper items depending on the state of the application
         void UpdateControls()
         {
-            bool bLsoAcqNoGrab = (saperaCameraManager.lsoCamera.m_Xfer != null) && (saperaCameraManager.lsoCamera.m_Xfer.Grabbing == false);
-            bool bLsoAcqGrab = (saperaCameraManager.lsoCamera.m_Xfer != null) && (saperaCameraManager.lsoCamera.m_Xfer.Grabbing == true);
-            bool bLsoNoGrab = (saperaCameraManager.lsoCamera.m_Xfer == null) || (saperaCameraManager.lsoCamera.m_Xfer.Grabbing == false);
+            bool bLsoAcqNoGrab = (saperaCameraManager.lsoCamera.Grabbing == false);
+            bool bLsoAcqGrab = (saperaCameraManager.lsoCamera.Grabbing == true);
+            bool bLsoNoGrab =  (saperaCameraManager.lsoCamera.Grabbing == false);
 
-            bool bOctAcqNoGrab = (saperaCameraManager.octCamera.m_Xfer != null) && (saperaCameraManager.octCamera.m_Xfer.Grabbing == false);
-            bool bOctAcqGrab = (saperaCameraManager.octCamera.m_Xfer != null) && (saperaCameraManager.octCamera.m_Xfer.Grabbing == true);
-            bool bOctNoGrab = (saperaCameraManager.octCamera.m_Xfer == null) || (saperaCameraManager.octCamera.m_Xfer.Grabbing == false);
+            bool bOctAcqNoGrab = (saperaCameraManager.octCamera.Grabbing == false);
+            bool bOctAcqGrab = (saperaCameraManager.octCamera.Grabbing == true);
+            bool bOctNoGrab = (saperaCameraManager.octCamera.Grabbing == false);
 
             //// Acquisition Control
             //button_Grab.Enabled = bAcqNoGrab && m_online;
@@ -190,28 +193,25 @@ namespace Varocto.Cameras
         private void button_Grab_Click_1(object sender, EventArgs e)
         {
             StatusLabelInfoTrash.Text = "";
-            if (saperaCameraManager.lsoCamera.m_Xfer.Grab())
+            if (saperaCameraManager.lsoCamera.Grab())
                 UpdateControls();
         }
 
         private void button_Freeze_Click_1(object sender, EventArgs e)
         {
-            AbortDlg abort = new AbortDlg(saperaCameraManager.lsoCamera.m_Xfer);
-            if (saperaCameraManager.lsoCamera.m_Xfer.Freeze())
+           // AbortDlg abort = new AbortDlg(saperaCameraManager.lsoCamera.m_Xfer);
+            if (saperaCameraManager.lsoCamera.Freeze())
             {
-                if (abort.ShowDialog() != DialogResult.OK)
-                    saperaCameraManager.lsoCamera.m_Xfer.Abort();
+           
                 UpdateControls();
             }
         }
 
         private void octSnapButton_Click(object sender, EventArgs e)
         {
-            AbortDlg abort = new AbortDlg(saperaCameraManager.octCamera.m_Xfer);
-            if (saperaCameraManager.octCamera.m_Xfer.Snap())
+           // AbortDlg abort = new AbortDlg(saperaCameraManager.octCamera.m_Xfer);
+            if (saperaCameraManager.octCamera.Snap())
             {
-                if (abort.ShowDialog() != DialogResult.OK)
-                    saperaCameraManager.octCamera.m_Xfer.Abort();
                 UpdateControls();
             }
 
@@ -220,17 +220,14 @@ namespace Varocto.Cameras
         private void octGrabButton_Click(object sender, EventArgs e)
         {
             StatusLabelInfoTrash.Text = "";
-            if (saperaCameraManager.octCamera.m_Xfer.Grab())
+            if (saperaCameraManager.octCamera.Grab())
                 UpdateControls();
         }
 
         private void octFreezeButton_Click(object sender, EventArgs e)
         {
-            AbortDlg abort = new AbortDlg(saperaCameraManager.octCamera.m_Xfer);
-            if (saperaCameraManager.octCamera.m_Xfer.Freeze())
-            {
-                if (abort.ShowDialog() != DialogResult.OK)
-                    saperaCameraManager.octCamera.m_Xfer.Abort();
+           if (saperaCameraManager.octCamera.m_Xfer.Freeze())
+            { 
                 UpdateControls();
             }
         }

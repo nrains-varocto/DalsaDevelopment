@@ -32,8 +32,8 @@ namespace Varocto.Cameras
         private string lsoCameraName;
         private string octCameraName;
 
-        public DalsaCamera octCamera;
-        public DalsaCamera lsoCamera;
+        public OctoplusCamera octCamera;
+        public OctoplusCamera lsoCamera;
 
 
         private ServerCategory m_ServerCategory;
@@ -41,21 +41,15 @@ namespace Varocto.Cameras
         public SaperaCameraManager()
         {
 
-            octCamera = new DalsaCamera(cameraLinkServer, octConfigFile, 1);
-            lsoCamera = new DalsaCamera(cameraLinkServer, lsoConfigFile, 0);
+            octCamera = new OctoplusCamera (cameraLinkServer, octConfigFile, 1);
+            lsoCamera = new OctoplusCamera(cameraLinkServer, lsoConfigFile, 0);
         }
 
         public void Initialize()
         {
+           octCamera.Initialize();
+           lsoCamera.Initialize();
 
-            for (int i = 0; i < SapManager.GetServerCount(); i++)
-            {
-                // Does this server support "Acq" (frame-grabber) or "AcqDevice" (camera)?
-                lsoServerName = SapManager.GetServerName(i);
-            }
-
-            octCamera.Initialize();
-            lsoCamera.Initialize();
         }
 
         public bool CreateObjects()
@@ -67,28 +61,10 @@ namespace Varocto.Cameras
         //{
 
 
-
-
-
-           
-        //}
-
-        //private void InitCameras()
-        //{
-
-
-        //    //int i = 0;
-           
-        //    //// Add "Acq" resources (cameras) to combo
-        //    //for (i = 0; i < SapManager.GetResourceCount(lsoServerName, SapManager.ResourceType.Acq); i++)
-        //    //{
-        //    //    string resourceName = SapManager.GetResourceName(lsoServerName, SapManager.ResourceType.Acq, i);
-        //    //    if (resourceName == "CameraLink Full Mono")
-        //    //        lsoCameraName = resourceName;
-        //    //}
-
-        //    //SpyderCamera.Instance.Initialize(lsoServerName, lsoConfigFile);
-        // }
+        public void OpenSerialConnections()
+        {
+            octCamera.OpenSerialConnection();
+        }
 
     }
 }
