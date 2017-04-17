@@ -32,6 +32,8 @@
             internal string m_ConfigFileName;
             internal string m_ServerName;
 
+            internal System.Threading.ManualResetEvent serialReplyEvent = new System.Threading.ManualResetEvent(false);
+            internal int serialLastByteRead; 
 
             // delegates
             public event FrameCaptured FrameCaptured;
@@ -144,8 +146,9 @@
             {
                 lock (padlock)
                 {
-                    string returnValue = serialPort.ReadExisting();
+                    int returnValue = serialPort.ReadByte();
 
+                serialReplyEvent.Set();
 
                 }
             }
@@ -327,7 +330,7 @@
                 }
             }
 
-            private string sensorWidth;
+            internal string sensorWidth;
             public virtual string SensorPhysicalWidth
             {
                 get
@@ -336,7 +339,7 @@
                 }
             }
 
-            private string roiSensorWidth;
+            internal string roiSensorWidth;
             public virtual string RoiSensorWidth
             {
                 get
@@ -352,7 +355,7 @@
                 }
             }
 
-            private string outputMode;
+            internal string outputMode;
         public virtual string OutputMode
         {
             get
@@ -366,7 +369,7 @@
         }
 
 
-            private string cameraLinkOutputFrequency;
+            internal string cameraLinkOutputFrequency;
             public virtual  string CameraLinkOutputFrequency
             {
                 get
@@ -382,7 +385,7 @@
                 }
             }
 
-            private bool reverseModeEnabled;
+            internal bool reverseModeEnabled;
             public virtual bool ReverseModeEnabled
             {
                 get
@@ -405,50 +408,56 @@
 
             }
 
-        internal UInt16 linePeriodInMinutes;
-            public virtual UInt16 LinePeriodInMinutes
-            {
+        internal UInt16 linePeriodInMicroSeconds;
+            public virtual UInt16 LinePeriodInMicroSeconds
+        {
                 get
                 {
-                    return linePeriodInMinutes;
+                    return linePeriodInMicroSeconds;
                 }
 
                 set
                 {
-                    linePeriodInMinutes = value;
+                linePeriodInMicroSeconds = value;
                 }
             }
 
-        internal UInt16 exposureTimeInMinutes;
-            public virtual UInt16 ExposureTimeInMinutes
+        /// <summary>
+        /// ExposureTimeMinimum Max Value 65535 us
+        /// min value 0;
+        /// </summary>
+        internal UInt16 exposureTimeMininumInMicroSecs;
+        public virtual ushort MinExposureTimeInMicroSeconds
+        {
+            get
+            {
+                return exposureTimeMininumInMicroSecs;
+            }
+
+            set
+            {
+                // evaluate exposureTimeMax
+                if ((value >= 0) && (value <= ushort.MaxValue))
+                    exposureTimeMininumInMicroSecs = value;
+            }
+        }
+
+            internal UInt16 exposureTimeInMicroSeconds;
+            public virtual UInt16 ExposureTimeInMicroSeconds
             {
                 get
                 {
-                    return exposureTimeInMinutes;
+                    return exposureTimeInMicroSeconds;
                 }
-
                 set
-                {
-                    // evaluate exposureTimeMax
-                    if (value <= 5000)
-                        exposureTimeInMinutes = value;
-                }
+                { }
             }
-
-        internal UInt16 maxExposureTimeInMinutes;
-            public virtual UInt16 MaxExposureTimeInMinutes
+            internal UInt16 maxExposureTimeInMicroSeconds;
+            public virtual UInt16 MaxExposureTimeInMicroSeconds
             {
                 get
                 {
-                    return maxExposureTimeInMinutes;
-                }
-            }
-        internal UInt16 minExposureTimeInMinutes;
-            public virtual UInt16 MinExposureTimeInMinutes
-            {
-                get
-                {
-                    return minExposureTimeInMinutes;
+                    return maxExposureTimeInMicroSeconds;
                 }
             }
 
@@ -467,7 +476,7 @@
                 }
             }
 
-        internal UInt16 WriteString(string command)
+        internal virtual UInt16 WriteString(string command)
             {
 
                 if (serialPort.IsOpen)

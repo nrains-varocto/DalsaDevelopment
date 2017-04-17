@@ -20,6 +20,7 @@ namespace Varocto.Cameras
         private const string FW_VERSION = "dfwv";
         private const string BAUD_RATE = "baud";
         private const string SENSOR_WIDTH = "snsw";
+        private const string ROI_WIDTH = "widt";
         private const string OUTPUT_MODE = "mode";
         private const string CAMERA_LINK_OUTPUT_FREQUENCY = "clfq";
         private const string REVERSE_READING = "revr";
@@ -46,6 +47,7 @@ namespace Varocto.Cameras
         private const string SAVE_FFC = "sffc";
 
 
+        
         bool CompareReply()
         {
             switch (true)

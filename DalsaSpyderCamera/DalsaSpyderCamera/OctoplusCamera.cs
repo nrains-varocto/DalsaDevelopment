@@ -11,7 +11,7 @@ using System.IO.Ports;
 namespace Varocto.Cameras
 {
 
-    public partial class OctoplusCamera : CameraLinkGenICamera 
+    public partial class OctoplusCamera : CameraLinkGenICamera
     {
         public OctoplusCamera()
         { }
@@ -37,96 +37,129 @@ namespace Varocto.Cameras
                 cmd = WRITE + TEST_PATTERN + "7" + CARRIAGE_RETURN;
             else
                 cmd = WRITE + TEST_PATTERN + "0" + CARRIAGE_RETURN;
-            serialPort.Write(cmd);
+            WriteString(cmd);
+
         }
 
         public override string ManufactureName
         {
             get
             {
+                string cmd = READ + MFG_NAME + CARRIAGE_RETURN;
+                WriteString(cmd);
+                manufactureName = serialPort.ReadExisting();
                 return manufactureName;
             }
         }
-        public string ModelName
+        public override string ModelName
         {
             get
             {
+                string cmd = READ + MODEL_NAME + CARRIAGE_RETURN;
+                WriteString(cmd);
+                modelName = serialPort.ReadExisting();
                 return modelName;
-            }
+           }
         }
 
-        public string Version
+        public override string Version
         {
             get
             {
+                string cmd = READ + DEVICE_VERSION + CARRIAGE_RETURN;
+                WriteString(cmd);
+                version = serialPort.ReadExisting();
                 return version;
             }
         }
 
-        public string ManufactureInfo
+        public override string ManufactureInfo
         {
             get
             {
+                string cmd = READ + MFG_INFO + CARRIAGE_RETURN;
+                WriteString(cmd);
+                version = serialPort.ReadExisting();
                 return manufactureInfo;
             }
         }
 
-        public string SerialNumber
+        public override string SerialNumber
         {
             get
             {
+                string cmd = READ + SERIAL_NUMBER + CARRIAGE_RETURN;
+                WriteString(cmd);
+                serialNumber = serialPort.ReadExisting();
                 return serialNumber;
             }
         }
 
-        public string UserDefinedDeviceName
+        public override string UserDefinedDeviceName
         {
             get
             {
+                string cmd = READ + USER_DEFINED_NAME + CARRIAGE_RETURN;
+                WriteString(cmd);
+                userDefinedDeviceName = serialPort.ReadExisting();
                 return userDefinedDeviceName;
             }
             set
             {
                 if (value.Length <= 64)
-                    userDefinedDeviceName = value;
+                {
+                    string cmd = WRITE + USER_DEFINED_NAME + value.ToString()+ CARRIAGE_RETURN;
+                    WriteString(cmd);
+                    userDefinedDeviceName = value.ToString();
+                }
             }
         }
 
-        public string FirmwareVersion
+        public override string FirmwareVersion
         {
             get
             {
+                string cmd = READ + FW_VERSION + CARRIAGE_RETURN;
+                WriteString(cmd);
+                firmwareVersion = serialPort.ReadExisting();
                 return firmwareVersion;
             }
         }
 
-        private string sensorWidth;
-        public string SensorPhysicalWidth
+        
+        public override string SensorPhysicalWidth
         {
             get
             {
+                string cmd = READ + SENSOR_WIDTH + CARRIAGE_RETURN;
+                WriteString(cmd);
+                sensorWidth = serialPort.ReadExisting();
                 return sensorWidth;
             }
         }
 
-        private string roiSensorWidth;
-        public string RoiSensorWidth
+       
+        public override string RoiSensorWidth
         {
             get
             {
+                string cmd = READ + ROI_WIDTH + CARRIAGE_RETURN;
+                WriteString(cmd);
+                sensorWidth = serialPort.ReadExisting();
                 return roiSensorWidth;
             }
             set
             {
-                if (value.Length > 4)
+                if (true)
                 {
+                    
                     roiSensorWidth = value;
                 }
             }
         }
 
-        private string outputMode;
-        public string OutputMode
+        string outputMode;
+        public override string OutputMode
         {
             get
             {
@@ -141,8 +174,9 @@ namespace Varocto.Cameras
             }
         }
 
-        private string cameraLinkOutputFrequency;
-        public string CameraLinkOutputFrequency
+
+        string cameraLinkOutputFrequency;
+        public override string CameraLinkOutputFrequency
         {
             get
             {
@@ -158,7 +192,7 @@ namespace Varocto.Cameras
         }
 
         private bool reverseModeEnabled;
-        public bool ReverseModeEnabled
+        public override bool ReverseModeEnabled
         {
             get
             {
@@ -170,72 +204,84 @@ namespace Varocto.Cameras
             }
         }
 
-        public void EnableTestMode()
+        public override void EnableTestMode()
         {
 
         }
 
-        public void SetTestPattern(string patternType, int testImageHeight, int testImageWidth)
+        public override void SetTestPattern(string patternType, int testImageHeight, int testImageWidth)
         {
 
         }
 
-        private UInt16 linePeriodInMinutes;
-        public UInt16 LinePeriodInMinutes
+
+        public override UInt16 LinePeriodInMicroSeconds
         {
             get
             {
-                return linePeriodInMinutes;
+                string cmd = READ + LINE_PERIOD + CARRIAGE_RETURN;
+                WriteString(cmd);
+                linePeriodInMicroSeconds = (ushort)(serialLastByteRead);
+                return linePeriodInMicroSeconds;
             }
 
             set
             {
-                linePeriodInMinutes = value;
+                if ((value > 0) && (value <= ushort.MaxValue))
+                {
+                    linePeriodInMicroSeconds = value;
+                    string cmd = WRITE + LINE_PERIOD + value.ToString() + CARRIAGE_RETURN;
+                    WriteString(cmd);
+                }
             }
         }
 
-        private UInt16 exposureTimeInMinutes;
-        public UInt16 ExposureTimeInMinutes
+
+        public override ushort MinExposureTimeInMicroSeconds
         {
             get
             {
-                return exposureTimeInMinutes;
+                string cmd = READ + EXPOSURE_TIME_MIN + CARRIAGE_RETURN;
+                WriteString(cmd);
+                exposureTimeMininumInMicroSecs = (ushort)serialLastByteRead;
+                return exposureTimeMininumInMicroSecs;
             }
 
             set
             {
                 // evaluate exposureTimeMax
-                if (value <= 5000)
-                    exposureTimeInMinutes = value;
+                if ((value >= 0) && (value <= ushort.MaxValue))
+                    exposureTimeMininumInMicroSecs = value;
+                string cmd = WRITE + EXPOSURE_TIME_MAX + value.ToString() + CARRIAGE_RETURN;
+                WriteString(cmd);
             }
         }
 
-        private UInt16 maxExposureTimeInMinutes;
-        public UInt16 MaxExposureTimeInMinutes
+
+        public override UInt16 MaxExposureTimeInMicroSeconds
         {
             get
             {
-                return maxExposureTimeInMinutes;
+                return maxExposureTimeInMicroSeconds;
             }
         }
 
-        private UInt16 minExposureTimeInMinutes;
-        public UInt16 MinExposureTimeInMinutes
+
+        public override UInt16 ExposureTimeInMicroSeconds
         {
             get
             {
-                return minExposureTimeInMinutes;
+                return exposureTimeInMicroSeconds;
             }
         }
 
 
-        public void SetTriggerMode(bool ExternalModeEnabled, bool ProgrammableExposureTimeEnabled)
+        public override void SetTriggerMode(bool ExternalModeEnabled, bool ProgrammableExposureTimeEnabled)
         {
 
         }
 
-        private UInt16 triggerMissedSinceLastReset;
-        public UInt16 TriggerMissedSinceLastReset
+        public override UInt16 TriggerMissedSinceLastReset
         {
             get
             {
@@ -243,25 +289,53 @@ namespace Varocto.Cameras
             }
         }
 
-        private UInt16 WriteString(string command)
+        internal override UInt16 WriteString(string command)
         {
-
             if (serialPort.IsOpen)
             {
-
                 serialPort.Write(command);
+                serialReplyEvent.WaitOne();
+
+                if (serialLastByteRead == 0)
+                    serialReplyEvent.Reset();
+                else
+                {
+                    string errorString = "";
+                    switch (serialLastByteRead)
+                    {
+                        case 32769:
+                            errorString = "Command Not Implemented in the camera.";
+                            break;
+                        case 32770:
+                            errorString = "At least one parameter is invalid or out of range.";
+                            break;
+                        case 32771:
+                            errorString = "Attempt to access to a not existing register address.";
+                            break;
+                        case 32772:
+                            errorString = "Attempt to write to a read only register";
+                            break;
+                        case 32773:
+                            errorString = "Attempt to access registers with an address which is not aligned according to the underlying technology";
+                            break;
+                        case 32774:
+                            errorString = "Attempt to read an non-readable or write an non-writable register address";
+                            break;
+                        case 32775:
+                            errorString = "The command receiver is currently busy";
+                            break;
+                        case 32779:
+                            errorString = "Timeout waiting for an acknowledge";
+                            break;
+                    }
+
+                    throw new IOException("Serial Communication Error: " + errorString);
+                }
             }
             else
                 throw new IOException("Serial Port is closed.");
             return 0;
         }
-
-
-
-
-
-
-
-
+    
     }
 }
