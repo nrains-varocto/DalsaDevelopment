@@ -8,9 +8,10 @@ namespace Varocto.Cameras
 
     public partial class OctoplusCamera
     {
+        private const string BLANK_SPACE = " ";
         private const string WRITE = "w";
         private const string READ = "r";
-        private const string CARRIAGE_RETURN = "/r";
+        private const string CARRIAGE_RETURN = "\r";
         private const string MFG_NAME = "vdnm";
         private const string MODEL_NAME = "mdnm";
         private const string DEVICE_VERSION = "dhwv";

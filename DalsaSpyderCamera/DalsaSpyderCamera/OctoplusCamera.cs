@@ -34,9 +34,9 @@ namespace Varocto.Cameras
             string cmd;
             //size 4 bytes
             if (enable)
-                cmd = WRITE + TEST_PATTERN + "7" + CARRIAGE_RETURN;
+                cmd = WRITE + BLANK_SPACE + TEST_PATTERN + BLANK_SPACE + "7" + CARRIAGE_RETURN;
             else
-                cmd = WRITE + TEST_PATTERN + "0" + CARRIAGE_RETURN;
+                cmd = WRITE + BLANK_SPACE + TEST_PATTERN + BLANK_SPACE + "0" + CARRIAGE_RETURN;
             WriteString(cmd);
 
         }
@@ -45,7 +45,7 @@ namespace Varocto.Cameras
         {
             get
             {
-                string cmd = READ + MFG_NAME + CARRIAGE_RETURN;
+                string cmd = READ + BLANK_SPACE + MFG_NAME + CARRIAGE_RETURN;
                 WriteString(cmd);
                 manufactureName = serialPort.ReadExisting();
                 return manufactureName;
@@ -55,7 +55,7 @@ namespace Varocto.Cameras
         {
             get
             {
-                string cmd = READ + MODEL_NAME + CARRIAGE_RETURN;
+                string cmd = READ + BLANK_SPACE + MODEL_NAME + CARRIAGE_RETURN;
                 WriteString(cmd);
                 modelName = serialPort.ReadExisting();
                 return modelName;
@@ -66,7 +66,7 @@ namespace Varocto.Cameras
         {
             get
             {
-                string cmd = READ + DEVICE_VERSION + CARRIAGE_RETURN;
+                string cmd = READ + BLANK_SPACE + DEVICE_VERSION + CARRIAGE_RETURN;
                 WriteString(cmd);
                 version = serialPort.ReadExisting();
                 return version;
@@ -77,7 +77,7 @@ namespace Varocto.Cameras
         {
             get
             {
-                string cmd = READ + MFG_INFO + CARRIAGE_RETURN;
+                string cmd = READ + BLANK_SPACE + MFG_INFO + CARRIAGE_RETURN;
                 WriteString(cmd);
                 version = serialPort.ReadExisting();
                 return manufactureInfo;
@@ -88,7 +88,7 @@ namespace Varocto.Cameras
         {
             get
             {
-                string cmd = READ + SERIAL_NUMBER + CARRIAGE_RETURN;
+                string cmd = READ + BLANK_SPACE + SERIAL_NUMBER + CARRIAGE_RETURN;
                 WriteString(cmd);
                 serialNumber = serialPort.ReadExisting();
                 return serialNumber;
@@ -99,7 +99,7 @@ namespace Varocto.Cameras
         {
             get
             {
-                string cmd = READ + USER_DEFINED_NAME + CARRIAGE_RETURN;
+                string cmd = READ + BLANK_SPACE + USER_DEFINED_NAME + CARRIAGE_RETURN;
                 WriteString(cmd);
                 userDefinedDeviceName = serialPort.ReadExisting();
                 return userDefinedDeviceName;
@@ -108,7 +108,7 @@ namespace Varocto.Cameras
             {
                 if (value.Length <= 64)
                 {
-                    string cmd = WRITE + USER_DEFINED_NAME + value.ToString()+ CARRIAGE_RETURN;
+                    string cmd = WRITE + BLANK_SPACE + USER_DEFINED_NAME + BLANK_SPACE + value.ToString()+ CARRIAGE_RETURN;
                     WriteString(cmd);
                     userDefinedDeviceName = value.ToString();
                 }
@@ -119,7 +119,7 @@ namespace Varocto.Cameras
         {
             get
             {
-                string cmd = READ + FW_VERSION + CARRIAGE_RETURN;
+                string cmd = READ + BLANK_SPACE + FW_VERSION + CARRIAGE_RETURN;
                 WriteString(cmd);
                 firmwareVersion = serialPort.ReadExisting();
                 return firmwareVersion;
@@ -131,7 +131,7 @@ namespace Varocto.Cameras
         {
             get
             {
-                string cmd = READ + SENSOR_WIDTH + CARRIAGE_RETURN;
+                string cmd = READ + BLANK_SPACE + SENSOR_WIDTH + CARRIAGE_RETURN;
                 WriteString(cmd);
                 sensorWidth = serialPort.ReadExisting();
                 return sensorWidth;
@@ -143,7 +143,7 @@ namespace Varocto.Cameras
         {
             get
             {
-                string cmd = READ + ROI_WIDTH + CARRIAGE_RETURN;
+                string cmd = READ + BLANK_SPACE + ROI_WIDTH + CARRIAGE_RETURN;
                 WriteString(cmd);
                 sensorWidth = serialPort.ReadExisting();
                 return roiSensorWidth;
@@ -219,7 +219,7 @@ namespace Varocto.Cameras
         {
             get
             {
-                string cmd = READ + LINE_PERIOD + CARRIAGE_RETURN;
+                string cmd = READ + BLANK_SPACE + LINE_PERIOD + CARRIAGE_RETURN;
                 WriteString(cmd);
                 linePeriodInMicroSeconds = (ushort)(serialLastByteRead);
                 return linePeriodInMicroSeconds;
@@ -230,7 +230,7 @@ namespace Varocto.Cameras
                 if ((value > 0) && (value <= ushort.MaxValue))
                 {
                     linePeriodInMicroSeconds = value;
-                    string cmd = WRITE + LINE_PERIOD + value.ToString() + CARRIAGE_RETURN;
+                    string cmd = WRITE + BLANK_SPACE + LINE_PERIOD + BLANK_SPACE + value.ToString() + CARRIAGE_RETURN;
                     WriteString(cmd);
                 }
             }
@@ -241,7 +241,7 @@ namespace Varocto.Cameras
         {
             get
             {
-                string cmd = READ + EXPOSURE_TIME_MIN + CARRIAGE_RETURN;
+                string cmd = READ + BLANK_SPACE + EXPOSURE_TIME_MIN + CARRIAGE_RETURN;
                 WriteString(cmd);
                 exposureTimeMininumInMicroSecs = (ushort)serialLastByteRead;
                 return exposureTimeMininumInMicroSecs;
@@ -252,7 +252,7 @@ namespace Varocto.Cameras
                 // evaluate exposureTimeMax
                 if ((value >= 0) && (value <= ushort.MaxValue))
                     exposureTimeMininumInMicroSecs = value;
-                string cmd = WRITE + EXPOSURE_TIME_MAX + value.ToString() + CARRIAGE_RETURN;
+                string cmd = WRITE + BLANK_SPACE + EXPOSURE_TIME_MAX + BLANK_SPACE + value.ToString() + CARRIAGE_RETURN;
                 WriteString(cmd);
             }
         }
