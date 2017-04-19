@@ -1,7 +1,7 @@
 ﻿
 namespace Varocto.Cameras
 {
-    partial class LsoViewer
+    partial class octConfigButton
     {
 
         private DALSA.SaperaLT.SapClassGui.ImageBox lsloImageBox;
@@ -46,6 +46,7 @@ namespace Varocto.Cameras
             this.octSnapButton = new System.Windows.Forms.Button();
             this.octSignalStatus = new System.Windows.Forms.Label();
             this.octFrameStatus = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.lsloGroupBox.SuspendLayout();
             this.octGroupBox.SuspendLayout();
             this.SuspendLayout();
@@ -114,12 +115,13 @@ namespace Varocto.Cameras
             // 
             // octGroupBox
             // 
+            this.octGroupBox.Controls.Add(this.button1);
             this.octGroupBox.Controls.Add(this.octFreezeButton);
             this.octGroupBox.Controls.Add(this.octGrabButton);
             this.octGroupBox.Controls.Add(this.octSnapButton);
-            this.octGroupBox.Location = new System.Drawing.Point(1007, 401);
+            this.octGroupBox.Location = new System.Drawing.Point(600, 401);
             this.octGroupBox.Name = "octGroupBox";
-            this.octGroupBox.Size = new System.Drawing.Size(143, 164);
+            this.octGroupBox.Size = new System.Drawing.Size(143, 187);
             this.octGroupBox.TabIndex = 11;
             this.octGroupBox.TabStop = false;
             this.octGroupBox.Text = "OCT";
@@ -159,7 +161,7 @@ namespace Varocto.Cameras
             // octSignalStatus
             // 
             this.octSignalStatus.AutoSize = true;
-            this.octSignalStatus.Location = new System.Drawing.Point(1004, 582);
+            this.octSignalStatus.Location = new System.Drawing.Point(608, 608);
             this.octSignalStatus.Name = "octSignalStatus";
             this.octSignalStatus.Size = new System.Drawing.Size(69, 13);
             this.octSignalStatus.TabIndex = 13;
@@ -168,24 +170,34 @@ namespace Varocto.Cameras
             // octFrameStatus
             // 
             this.octFrameStatus.AutoSize = true;
-            this.octFrameStatus.Location = new System.Drawing.Point(1004, 608);
+            this.octFrameStatus.Location = new System.Drawing.Point(894, 608);
             this.octFrameStatus.Name = "octFrameStatus";
             this.octFrameStatus.Size = new System.Drawing.Size(69, 13);
             this.octFrameStatus.TabIndex = 12;
             this.octFrameStatus.Text = "Frame Status";
             // 
-            // LsoViewer
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(20, 149);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(105, 23);
+            this.button1.TabIndex = 3;
+            this.button1.Text = "Config";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // octConfigButton
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1955, 647);
+            this.ClientSize = new System.Drawing.Size(1347, 631);
             this.Controls.Add(this.octSignalStatus);
             this.Controls.Add(this.octFrameStatus);
             this.Controls.Add(this.octGroupBox);
             this.Controls.Add(this.StatusLabelInfo);
             this.Controls.Add(this.lsloGroupBox);
             this.Controls.Add(this.StatusLabelInfoTrash);
-            this.Name = "LsoViewer";
+            this.Name = "octConfigButton";
             this.Text = "Form1";
             this.lsloGroupBox.ResumeLayout(false);
             this.octGroupBox.ResumeLayout(false);
@@ -210,6 +222,7 @@ namespace Varocto.Cameras
         private System.Windows.Forms.Button octSnapButton;
         private System.Windows.Forms.Label octSignalStatus;
         private System.Windows.Forms.Label octFrameStatus;
+        private System.Windows.Forms.Button button1;
     }
 }
 

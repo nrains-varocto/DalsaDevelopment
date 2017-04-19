@@ -25,12 +25,15 @@
             public SapBuffer m_Buffers;
             public SapAcqToBuf m_Xfer;
             public SapView m_View;
+            public SapDisplay m_Display;
             internal bool m_IsSignalDetected;
             internal bool m_online;
             internal bool m_restore;
             internal SapLocation m_ServerLocation;
             internal string m_ConfigFileName;
             internal string m_ServerName;
+
+        public IntPtr[] buffer; 
 
             internal System.Threading.ManualResetEvent serialReplyEvent = new System.Threading.ManualResetEvent(false);
             internal int serialLastByteRead; 
@@ -67,12 +70,16 @@
                 // define on-line object
                
                 m_Acquisition = new SapAcquisition(m_ServerLocation, m_ConfigFileName);
-                if (SapBuffer.IsBufferTypeSupported(m_ServerLocation, SapBuffer.MemoryType.Contiguous))
-                    m_Buffers = new SapBufferWithTrash(2, m_Acquisition, SapBuffer.MemoryType.ScatterGather);
-                else
-                    m_Buffers = new SapBufferWithTrash(2, m_Acquisition, SapBuffer.MemoryType.ScatterGatherPhysical);
-                m_Xfer = new SapAcqToBuf(m_Acquisition, m_Buffers);
-                m_View = new SapView(m_Buffers);
+            if (SapBuffer.IsBufferTypeSupported(m_ServerLocation, SapBuffer.MemoryType.Contiguous))
+            {
+                buffer = new IntPtr[2048 * 2048];
+                m_Buffers = new SapBuffer(2, buffer, 2048, 2048, SapFormat.Mono12, SapBuffer.MemoryType.Contiguous);
+                // m_Buffers = new SapBufferWithTrash(2, m_Acquisition, SapBuffer.MemoryType.Contiguous, );
+            }
+            else
+                m_Buffers = new SapBufferWithTrash(2, m_Acquisition, SapBuffer.MemoryType.ScatterGatherPhysical);
+                 m_Xfer = new SapAcqToBuf(m_Acquisition, m_Buffers);
+                 m_View = new SapView(m_Buffers);
 
 
                 //event for view
@@ -398,14 +405,22 @@
                 }
             }
 
-            public virtual void EnableTestMode()
+            public virtual void SetTestPattern(TestPattern testPattern)
             {
+
+               
 
             }
 
-            public virtual void SetTestPattern(string patternType, int testImageHeight, int testImageWidth)
+
+            internal int testImageHeight;
+            public virtual int TestImageHeight
             {
 
+                set
+                {
+                    testImageHeight = value;
+                }
             }
 
         internal UInt16 linePeriodInMicroSeconds;

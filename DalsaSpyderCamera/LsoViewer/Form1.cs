@@ -10,10 +10,11 @@ using System.Windows.Forms;
 
 using DALSA.SaperaLT.SapClassBasic;
 using DALSA.SaperaLT.SapClassGui;
+using LsoViewer;
 
 namespace Varocto.Cameras
 {
-    public partial class LsoViewer : Form
+    public partial class octConfigButton : Form
     {
 
 
@@ -48,7 +49,7 @@ namespace Varocto.Cameras
                 this.StatusLabelInfoTrash.Text = str;
             }
         }
-        public LsoViewer()
+        public octConfigButton()
         {
             InitializeComponent();
 
@@ -64,7 +65,7 @@ namespace Varocto.Cameras
             this.lsloImageBox.Location = new System.Drawing.Point(241, 4);
             this.lsloImageBox.Name = "lsloImageBox";
             // this.m_ImageBox.PixelValueDisplay = this.PixelDataValue;
-            this.lsloImageBox.Size = new System.Drawing.Size(1024, 1024);
+            this.lsloImageBox.Size = new System.Drawing.Size(256, 256);
             this.lsloImageBox.SliderEnable = false;
             this.lsloImageBox.SliderMaximum = 10;
             this.lsloImageBox.SliderMinimum = 0;
@@ -75,10 +76,10 @@ namespace Varocto.Cameras
            //
 
             this.octImageBox = new DALSA.SaperaLT.SapClassGui.ImageBox();
-            this.octImageBox.Location = new System.Drawing.Point(1506, 4);
+            this.octImageBox.Location = new System.Drawing.Point(600, 4);
             this.octImageBox.Name = "octImageBox";
             // this.m_ImageBox.PixelValueDisplay = this.PixelDataValue;
-            this.octImageBox.Size = new System.Drawing.Size(1024, 1024);
+            this.octImageBox.Size = new System.Drawing.Size(256, 256);
             this.octImageBox.SliderEnable = false;
             this.octImageBox.SliderMaximum = 10;
             this.octImageBox.SliderMinimum = 0;
@@ -95,15 +96,23 @@ namespace Varocto.Cameras
             this.lsloImageBox.View = saperaCameraManager.lsoCamera.m_View;
             this.octImageBox.View = saperaCameraManager.octCamera.m_View;
 
+
+            this.lsloImageBox.View.SetScalingMode(true);
+            this.octImageBox.View.SetScalingMode(true);
+
+            this.lsloImageBox.View.SetScalingMode(lsloImageBox.View.ScalingSrcArea, new Rectangle(lsloImageBox.Location, lsloImageBox.Size));
+            this.octImageBox.View.SetScalingMode(octImageBox.View.ScalingSrcArea, new Rectangle(octImageBox.Location, octImageBox.Size));
+           
             saperaCameraManager.CreateObjects();
             saperaCameraManager.OpenSerialConnections();
 
             saperaCameraManager.octCamera.EnableTestPattern(true);
+            string test = saperaCameraManager.octCamera.CameraLinkOutputFrequency;
+            saperaCameraManager.octCamera.CameraLinkOutputFrequency = OutputFrequency.EightyMHZ.ToString();
             saperaCameraManager.lsoCamera.FrameCaptured += Frame_Captured;
             saperaCameraManager.octCamera.FrameCaptured += OctCamera_FrameCaptured;
 
-            lsloImageBox.OnSize();
-            octImageBox.OnSize();
+            
 
             EnableSignalStatus();
             UpdateControls();
@@ -230,6 +239,12 @@ namespace Varocto.Cameras
             { 
                 UpdateControls();
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            OctCameraConfig configFrm = new OctCameraConfig(saperaCameraManager.octCamera);
+            configFrm.Show();
         }
     }
 }

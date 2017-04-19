@@ -161,32 +161,41 @@ namespace Varocto.Cameras
         string outputMode;
         public override string OutputMode
         {
-            get
-            {
-                return outputMode;
-            }
+           
             set
             {
-                if (value.Length > 4)
-                {
-                    outputMode = value;
-                }
+                // output mode default to 2 taps, 12 pixels
+                string cmd = WRITE + BLANK_SPACE + OUTPUT_MODE + "0x4212" + CARRIAGE_RETURN;
+                WriteString(cmd);
+                serialReplyEvent.WaitOne();
             }
         }
 
-
+        /// <summary>
+        /// ALLOWED VALUES
+        /// 0 - 40 MHz
+        /// 1 - 60 MHz
+        /// 2 - 70 MHz
+        /// 4 - 85 MHz
+        /// default - 4
+        /// </summary>
         string cameraLinkOutputFrequency;
         public override string CameraLinkOutputFrequency
         {
             get
             {
+                WriteString(READ + BLANK_SPACE + CAMERA_LINK_OUTPUT_FREQUENCY + CARRIAGE_RETURN);
+                serialReplyEvent.WaitOne();
+                cameraLinkOutputFrequency = serialPort.ReadExisting();
                 return cameraLinkOutputFrequency;
             }
             set
             {
-                if (value.Length > 4)
+                if (value != "0" || value != "1" || value != "2"  || value != "3")
                 {
                     cameraLinkOutputFrequency = value;
+                    WriteString(WRITE + BLANK_SPACE + CAMERA_LINK_OUTPUT_FREQUENCY + BLANK_SPACE + value + CARRIAGE_RETURN);
+                    serialReplyEvent.WaitOne();
                 }
             }
         }
@@ -196,22 +205,43 @@ namespace Varocto.Cameras
         {
             get
             {
+                
                 return reverseModeEnabled;
             }
             set
             {
                 reverseModeEnabled = value;
+                string cmd = "";
+                if (value)
+                    cmd = WRITE + BLANK_SPACE + REVERSE_READING + BLANK_SPACE + "1" + CARRIAGE_RETURN;
+                else
+                    cmd = WRITE + BLANK_SPACE + REVERSE_READING + BLANK_SPACE + "0" + CARRIAGE_RETURN;
+                WriteString(cmd);
             }
         }
 
-        public override void EnableTestMode()
+        public override void SetTestPattern(TestPattern testPattern)
         {
-
+                string cmd = WRITE + BLANK_SPACE + TEST_PATTERN + BLANK_SPACE + testPattern.ToString() + CARRIAGE_RETURN;
+                WriteString(cmd);
+                serialReplyEvent.WaitOne();
         }
 
-        public override void SetTestPattern(string patternType, int testImageHeight, int testImageWidth)
+        public void SetTestPattern(int testPattern)
         {
+            string cmd = WRITE + BLANK_SPACE + TEST_PATTERN + BLANK_SPACE + testPattern.ToString() + CARRIAGE_RETURN;
+            WriteString(cmd);
+            serialReplyEvent.WaitOne();
+        }
 
+        public override int TestImageHeight
+        {
+            set
+            {
+                string cmd = WRITE + BLANK_SPACE + TEST_PATTERN + BLANK_SPACE + value.ToString() + CARRIAGE_RETURN;
+                WriteString(cmd);
+                serialReplyEvent.WaitOne();
+            }
         }
 
 
@@ -246,15 +276,6 @@ namespace Varocto.Cameras
                 exposureTimeMininumInMicroSecs = (ushort)serialLastByteRead;
                 return exposureTimeMininumInMicroSecs;
             }
-
-            set
-            {
-                // evaluate exposureTimeMax
-                if ((value >= 0) && (value <= ushort.MaxValue))
-                    exposureTimeMininumInMicroSecs = value;
-                string cmd = WRITE + BLANK_SPACE + EXPOSURE_TIME_MAX + BLANK_SPACE + value.ToString() + CARRIAGE_RETURN;
-                WriteString(cmd);
-            }
         }
 
 
@@ -278,7 +299,18 @@ namespace Varocto.Cameras
 
         public override void SetTriggerMode(bool ExternalModeEnabled, bool ProgrammableExposureTimeEnabled)
         {
+            string cmd = "";
+            if (!ExternalModeEnabled && ProgrammableExposureTimeEnabled)
+                cmd = WRITE + BLANK_SPACE + TRIGGER_MODE + TriggerModes.InteralProgrammbleMaxExposureTimeLinePeriod + CARRIAGE_RETURN;
+            else if (!ExternalModeEnabled && !ProgrammableExposureTimeEnabled)
+                cmd = WRITE + BLANK_SPACE + TRIGGER_MODE + TriggerModes.InternalMaxExposureTimeProgrammablePeriod + CARRIAGE_RETURN;
+            else if (ExternalModeEnabled && ProgrammableExposureTimeEnabled)
+                cmd = WRITE + BLANK_SPACE + TRIGGER_MODE + TriggerModes.ExternalProgrammableMaxExposure + CARRIAGE_RETURN;
+            else
+                cmd = WRITE + BLANK_SPACE + TRIGGER_MODE + TriggerModes.ExternalMaxExposureTime + CARRIAGE_RETURN;
 
+            WriteString(cmd);
+            serialReplyEvent.WaitOne();
         }
 
         public override UInt16 TriggerMissedSinceLastReset

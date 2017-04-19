@@ -34,7 +34,7 @@ namespace Varocto.Cameras
         private const string EXPOSURE_TIME_MAX = "tima";
         private const string TRIGGER_MODE = "sync";
         private const string TRIGGER_MISSED = "trgm";
-        private const string ANALOG_GAIN = "pamp"; 
+        private const string ANALOG_GAIN = "pamp";
         private const string DIGITAL_GAIN = "gain";
         private const string DIGITAL_OFFSET = "offs";
         private const string FFC_ENABLE = "ffcp";
@@ -47,20 +47,38 @@ namespace Varocto.Cameras
         private const string RESTORE_FFC = "rffc";
         private const string SAVE_FFC = "sffc";
 
-
-        
-        bool CompareReply()
-        {
-            switch (true)
-            {
-                case true:
-                    return true;
-
-
-            }
-        }
     }
 
+    public enum OutputFrequency
+    {
+        FortyMHZ = 0,
+        SixtyMHZ = 1,
+        SeventyMHZ = 2,
+        EightyMHZ = 3
+    }
+
+    public enum TestPattern
+    {
+        Off = 0,
+        GreyHorizontalRamp = 1,
+        GreyVerticalRamp = 2,
+        GreyDiagonalRamp = 3,
+        MovingGreyHorizontalRamp = 4,
+        MovingGreyVerticalRamp = 5,
+        MovingGreyDiagonalRamp = 6,
+        CheckerBoard = 7,
+        HorizontalLines = 8,
+        VerticalLines = 9,
+        ConstantPattern = 10
+    }
+
+    public enum TriggerModes
+    {
+        InteralProgrammbleMaxExposureTimeLinePeriod = 0,
+        InternalMaxExposureTimeProgrammablePeriod = 1,
+        ExternalProgrammableMaxExposure = 2,
+        ExternalMaxExposureTime = 3
+    }
 
      
     
