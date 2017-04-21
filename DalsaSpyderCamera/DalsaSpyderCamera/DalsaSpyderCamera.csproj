@@ -75,6 +75,8 @@
     <Compile Include="SaperaCameraException.cs" />
     <Compile Include="SaperaCameraManager.cs" />
     <Compile Include="CameraLinkGenICamera.cs" />
+    <Compile Include="SpyderThree.cs" />
+    <Compile Include="SpyderThreeCommands.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

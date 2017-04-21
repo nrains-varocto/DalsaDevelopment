@@ -34,7 +34,7 @@ namespace LsoViewer
             triggerModeComboBox.Items.Add(TriggerModes.ExternalProgrammableMaxExposure.ToString());
             triggerModeComboBox.Items.Add(TriggerModes.ExternalMaxExposureTime.ToString());
 
-            triggerModeComboBox.SelectedIndex = 0;
+            triggerModeComboBox.SelectedIndex = 1;
         }
 
         private void fillTestPatternComboBox()

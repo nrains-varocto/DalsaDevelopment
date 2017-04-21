@@ -1,7 +1,7 @@
 ﻿
 namespace Varocto.Cameras
 {
-    partial class octConfigButton
+    partial class VaroctoCameraViewer
     {
 
         private DALSA.SaperaLT.SapClassGui.ImageBox lsloImageBox;
@@ -41,12 +41,15 @@ namespace Varocto.Cameras
             this.button_Snap = new System.Windows.Forms.Button();
             this.StatusLabelInfo = new System.Windows.Forms.Label();
             this.octGroupBox = new System.Windows.Forms.GroupBox();
+            this.saveButton = new System.Windows.Forms.Button();
+            this.viewButton = new System.Windows.Forms.Button();
+            this.bufferDialogButton = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.octFreezeButton = new System.Windows.Forms.Button();
             this.octGrabButton = new System.Windows.Forms.Button();
             this.octSnapButton = new System.Windows.Forms.Button();
             this.octSignalStatus = new System.Windows.Forms.Label();
             this.octFrameStatus = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
             this.lsloGroupBox.SuspendLayout();
             this.octGroupBox.SuspendLayout();
             this.SuspendLayout();
@@ -54,7 +57,7 @@ namespace Varocto.Cameras
             // StatusLabelInfoTrash
             // 
             this.StatusLabelInfoTrash.AutoSize = true;
-            this.StatusLabelInfoTrash.Location = new System.Drawing.Point(24, 608);
+            this.StatusLabelInfoTrash.Location = new System.Drawing.Point(208, 64);
             this.StatusLabelInfoTrash.Name = "StatusLabelInfoTrash";
             this.StatusLabelInfoTrash.Size = new System.Drawing.Size(69, 13);
             this.StatusLabelInfoTrash.TabIndex = 0;
@@ -65,9 +68,9 @@ namespace Varocto.Cameras
             this.lsloGroupBox.Controls.Add(this.button_Freeze);
             this.lsloGroupBox.Controls.Add(this.button_Grab);
             this.lsloGroupBox.Controls.Add(this.button_Snap);
-            this.lsloGroupBox.Location = new System.Drawing.Point(24, 401);
+            this.lsloGroupBox.Location = new System.Drawing.Point(24, 23);
             this.lsloGroupBox.Name = "lsloGroupBox";
-            this.lsloGroupBox.Size = new System.Drawing.Size(143, 164);
+            this.lsloGroupBox.Size = new System.Drawing.Size(139, 514);
             this.lsloGroupBox.TabIndex = 10;
             this.lsloGroupBox.TabStop = false;
             this.lsloGroupBox.Text = "LSLO";
@@ -107,7 +110,7 @@ namespace Varocto.Cameras
             // StatusLabelInfo
             // 
             this.StatusLabelInfo.AutoSize = true;
-            this.StatusLabelInfo.Location = new System.Drawing.Point(24, 582);
+            this.StatusLabelInfo.Location = new System.Drawing.Point(208, 37);
             this.StatusLabelInfo.Name = "StatusLabelInfo";
             this.StatusLabelInfo.Size = new System.Drawing.Size(69, 13);
             this.StatusLabelInfo.TabIndex = 11;
@@ -115,20 +118,63 @@ namespace Varocto.Cameras
             // 
             // octGroupBox
             // 
+            this.octGroupBox.Controls.Add(this.saveButton);
+            this.octGroupBox.Controls.Add(this.viewButton);
+            this.octGroupBox.Controls.Add(this.bufferDialogButton);
             this.octGroupBox.Controls.Add(this.button1);
             this.octGroupBox.Controls.Add(this.octFreezeButton);
             this.octGroupBox.Controls.Add(this.octGrabButton);
             this.octGroupBox.Controls.Add(this.octSnapButton);
-            this.octGroupBox.Location = new System.Drawing.Point(600, 401);
+            this.octGroupBox.Location = new System.Drawing.Point(826, 23);
             this.octGroupBox.Name = "octGroupBox";
-            this.octGroupBox.Size = new System.Drawing.Size(143, 187);
+            this.octGroupBox.Size = new System.Drawing.Size(146, 576);
             this.octGroupBox.TabIndex = 11;
             this.octGroupBox.TabStop = false;
             this.octGroupBox.Text = "OCT";
             // 
+            // saveButton
+            // 
+            this.saveButton.Location = new System.Drawing.Point(20, 230);
+            this.saveButton.Name = "saveButton";
+            this.saveButton.Size = new System.Drawing.Size(105, 23);
+            this.saveButton.TabIndex = 6;
+            this.saveButton.Text = "Save";
+            this.saveButton.UseVisualStyleBackColor = true;
+            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
+            // 
+            // viewButton
+            // 
+            this.viewButton.Location = new System.Drawing.Point(20, 201);
+            this.viewButton.Name = "viewButton";
+            this.viewButton.Size = new System.Drawing.Size(105, 23);
+            this.viewButton.TabIndex = 5;
+            this.viewButton.Text = "View Settings";
+            this.viewButton.UseVisualStyleBackColor = true;
+            this.viewButton.Click += new System.EventHandler(this.viewButton_Click);
+            // 
+            // bufferDialogButton
+            // 
+            this.bufferDialogButton.Location = new System.Drawing.Point(20, 172);
+            this.bufferDialogButton.Name = "bufferDialogButton";
+            this.bufferDialogButton.Size = new System.Drawing.Size(105, 23);
+            this.bufferDialogButton.TabIndex = 4;
+            this.bufferDialogButton.Text = "Buffer";
+            this.bufferDialogButton.UseVisualStyleBackColor = true;
+            this.bufferDialogButton.Click += new System.EventHandler(this.bufferDialogButton_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(20, 143);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(105, 23);
+            this.button1.TabIndex = 3;
+            this.button1.Text = "Config";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // octFreezeButton
             // 
-            this.octFreezeButton.Location = new System.Drawing.Point(20, 115);
+            this.octFreezeButton.Location = new System.Drawing.Point(20, 90);
             this.octFreezeButton.Name = "octFreezeButton";
             this.octFreezeButton.Size = new System.Drawing.Size(105, 24);
             this.octFreezeButton.TabIndex = 2;
@@ -138,7 +184,7 @@ namespace Varocto.Cameras
             // 
             // octGrabButton
             // 
-            this.octGrabButton.Location = new System.Drawing.Point(20, 72);
+            this.octGrabButton.Location = new System.Drawing.Point(20, 60);
             this.octGrabButton.Name = "octGrabButton";
             this.octGrabButton.Size = new System.Drawing.Size(105, 24);
             this.octGrabButton.TabIndex = 1;
@@ -161,7 +207,7 @@ namespace Varocto.Cameras
             // octSignalStatus
             // 
             this.octSignalStatus.AutoSize = true;
-            this.octSignalStatus.Location = new System.Drawing.Point(608, 608);
+            this.octSignalStatus.Location = new System.Drawing.Point(1008, 58);
             this.octSignalStatus.Name = "octSignalStatus";
             this.octSignalStatus.Size = new System.Drawing.Size(69, 13);
             this.octSignalStatus.TabIndex = 13;
@@ -170,35 +216,26 @@ namespace Varocto.Cameras
             // octFrameStatus
             // 
             this.octFrameStatus.AutoSize = true;
-            this.octFrameStatus.Location = new System.Drawing.Point(894, 608);
+            this.octFrameStatus.Location = new System.Drawing.Point(1008, 34);
             this.octFrameStatus.Name = "octFrameStatus";
             this.octFrameStatus.Size = new System.Drawing.Size(69, 13);
             this.octFrameStatus.TabIndex = 12;
             this.octFrameStatus.Text = "Frame Status";
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(20, 149);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(105, 23);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "Config";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // octConfigButton
+            // VaroctoCameraViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1347, 631);
+            this.ClientSize = new System.Drawing.Size(1659, 825);
             this.Controls.Add(this.octSignalStatus);
             this.Controls.Add(this.octFrameStatus);
             this.Controls.Add(this.octGroupBox);
             this.Controls.Add(this.StatusLabelInfo);
             this.Controls.Add(this.lsloGroupBox);
             this.Controls.Add(this.StatusLabelInfoTrash);
-            this.Name = "octConfigButton";
+            this.Name = "VaroctoCameraViewer";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.VaroctoCameraViewer_Load);
             this.lsloGroupBox.ResumeLayout(false);
             this.octGroupBox.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -223,6 +260,9 @@ namespace Varocto.Cameras
         private System.Windows.Forms.Label octSignalStatus;
         private System.Windows.Forms.Label octFrameStatus;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button bufferDialogButton;
+        private System.Windows.Forms.Button viewButton;
+        private System.Windows.Forms.Button saveButton;
     }
 }
 

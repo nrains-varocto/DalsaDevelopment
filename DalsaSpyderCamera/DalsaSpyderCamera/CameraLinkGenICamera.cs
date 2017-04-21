@@ -70,16 +70,16 @@
                 // define on-line object
                
                 m_Acquisition = new SapAcquisition(m_ServerLocation, m_ConfigFileName);
-            if (SapBuffer.IsBufferTypeSupported(m_ServerLocation, SapBuffer.MemoryType.Contiguous))
-            {
-                buffer = new IntPtr[2048 * 2048];
-                m_Buffers = new SapBuffer(2, buffer, 2048, 2048, SapFormat.Mono12, SapBuffer.MemoryType.Contiguous);
-                // m_Buffers = new SapBufferWithTrash(2, m_Acquisition, SapBuffer.MemoryType.Contiguous, );
-            }
-            else
-                m_Buffers = new SapBufferWithTrash(2, m_Acquisition, SapBuffer.MemoryType.ScatterGatherPhysical);
-                 m_Xfer = new SapAcqToBuf(m_Acquisition, m_Buffers);
-                 m_View = new SapView(m_Buffers);
+                if (SapBuffer.IsBufferTypeSupported(m_ServerLocation, SapBuffer.MemoryType.Contiguous))
+                {
+                    m_Buffers = new SapBufferWithTrash(2, m_Acquisition, SapBuffer.MemoryType.ScatterGatherPhysical );
+                }
+                else
+                    m_Buffers = new SapBufferWithTrash(2, m_Acquisition, SapBuffer.MemoryType.ScatterGatherPhysical);
+
+            //m_Buffers.Format = SapFormat.Mono16;
+                m_Xfer = new SapAcqToBuf(m_Acquisition, m_Buffers);
+                m_View = new SapView(m_Buffers);
 
 
                 //event for view
@@ -149,14 +149,21 @@
                     serialPort.Close();
             }
 
+            internal string serialBuffer = "";
             internal void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
             {
                 lock (padlock)
                 {
-                    int returnValue = serialPort.ReadByte();
-
-                serialReplyEvent.Set();
-
+                    System.Threading.Thread.Sleep(100);
+                    serialBuffer += serialPort.ReadExisting();
+                    if (!serialBuffer.Contains("Ok"))
+                    {
+                        serialBuffer = "";
+                        serialReplyEvent.Set();
+                    }
+                    else
+                        serialReplyEvent.Set();
+                        
                 }
             }
 
@@ -376,8 +383,8 @@
         }
 
 
-            internal string cameraLinkOutputFrequency;
-            public virtual  string CameraLinkOutputFrequency
+            internal int cameraLinkOutputFrequency;
+            public virtual  int CameraLinkOutputFrequency
             {
                 get
                 {
@@ -385,10 +392,7 @@
                 }
                 set
                 {
-                    if (value.Length > 4)
-                    {
-                        cameraLinkOutputFrequency = value;
-                    }
+                    cameraLinkOutputFrequency = value;
                 }
             }
 
@@ -441,8 +445,8 @@
         /// ExposureTimeMinimum Max Value 65535 us
         /// min value 0;
         /// </summary>
-        internal UInt16 exposureTimeMininumInMicroSecs;
-        public virtual ushort MinExposureTimeInMicroSeconds
+        internal string exposureTimeMininumInMicroSecs;
+        public virtual string MinExposureTimeInMicroSeconds
         {
             get
             {
@@ -452,13 +456,13 @@
             set
             {
                 // evaluate exposureTimeMax
-                if ((value >= 0) && (value <= ushort.MaxValue))
+                if ((Convert.ToUInt16(value) >= 0) && (Convert.ToUInt16(value) <= ushort.MaxValue))
                     exposureTimeMininumInMicroSecs = value;
             }
         }
 
-            internal UInt16 exposureTimeInMicroSeconds;
-            public virtual UInt16 ExposureTimeInMicroSeconds
+            internal string exposureTimeInMicroSeconds;
+            public virtual string ExposureTimeInMicroSeconds
             {
                 get
                 {
@@ -467,8 +471,8 @@
                 set
                 { }
             }
-            internal UInt16 maxExposureTimeInMicroSeconds;
-            public virtual UInt16 MaxExposureTimeInMicroSeconds
+            internal string maxExposureTimeInMicroSeconds;
+            public virtual string MaxExposureTimeInMicroSeconds
             {
                 get
                 {

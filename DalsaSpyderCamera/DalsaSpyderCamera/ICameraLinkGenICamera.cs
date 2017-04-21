@@ -2,15 +2,15 @@
 { 
     public interface IVaroctoCamera
     {
-        string CameraLinkOutputFrequency { get; set; }
-        ushort ExposureTimeInMicroSeconds { get; set; }
+        int CameraLinkOutputFrequency { get; set; }
+        string ExposureTimeInMicroSeconds { get; set; }
         string FirmwareVersion { get; }
         bool Grabbing { get; }
         ushort LinePeriodInMicroSeconds { get; set; }
         string ManufactureInfo { get; }
         string ManufactureName { get; }
-        ushort MaxExposureTimeInMicroSeconds { get; }
-        ushort MinExposureTimeInMicroSeconds { get; }
+        string MaxExposureTimeInMicroSeconds { get; }
+        string MinExposureTimeInMicroSeconds { get; }
         string ModelName { get; }
         string OutputMode { get; set; }
         bool ReverseModeEnabled { get; set; }

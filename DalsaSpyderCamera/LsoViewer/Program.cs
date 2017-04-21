@@ -16,7 +16,7 @@ namespace Varocto.Cameras
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new octConfigButton());
+            Application.Run(new VaroctoCameraViewer());
         }
     }
 }

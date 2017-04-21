@@ -11,12 +11,12 @@ using System.IO.Ports;
 namespace Varocto.Cameras
 {
 
-    public partial class OctoplusCamera : CameraLinkGenICamera
+    public partial class SpyderThree : CameraLinkGenICamera
     {
-        public OctoplusCamera()
+        public SpyderThree()
         { }
 
-        public OctoplusCamera(string ServerName, string ConfigFile, int ResourceIndex)
+        public SpyderThree(string ServerName, string ConfigFile, int ResourceIndex)
         {
             if (!String.IsNullOrEmpty(ServerName) && !(String.IsNullOrEmpty(ConfigFile)))
             {
@@ -59,7 +59,7 @@ namespace Varocto.Cameras
                 WriteString(cmd);
                 modelName = serialPort.ReadExisting();
                 return modelName;
-           }
+            }
         }
 
         public override string Version
@@ -108,7 +108,7 @@ namespace Varocto.Cameras
             {
                 if (value.Length <= 64)
                 {
-                    string cmd = WRITE + BLANK_SPACE + USER_DEFINED_NAME + BLANK_SPACE + value.ToString()+ CARRIAGE_RETURN;
+                    string cmd = WRITE + BLANK_SPACE + USER_DEFINED_NAME + BLANK_SPACE + value.ToString() + CARRIAGE_RETURN;
                     WriteString(cmd);
                     userDefinedDeviceName = value.ToString();
                 }
@@ -126,7 +126,7 @@ namespace Varocto.Cameras
             }
         }
 
-        
+
         public override string SensorPhysicalWidth
         {
             get
@@ -138,7 +138,7 @@ namespace Varocto.Cameras
             }
         }
 
-       
+
         public override string RoiSensorWidth
         {
             get
@@ -153,11 +153,11 @@ namespace Varocto.Cameras
                 if (true)
                 {
 
-                    string cmd = WRITE + BLANK_SPACE + ROI_WIDTH + BLANK_SPACE + value.ToString()+ CARRIAGE_RETURN;
+                    string cmd = WRITE + BLANK_SPACE + ROI_WIDTH + BLANK_SPACE + value.ToString() + CARRIAGE_RETURN;
                     WriteString(cmd);
                     sensorWidth = serialPort.ReadExisting();
                     serialPort.DiscardOutBuffer();
-                    
+
                     roiSensorWidth = value;
                 }
             }
@@ -166,7 +166,7 @@ namespace Varocto.Cameras
         string outputMode;
         public override string OutputMode
         {
-           
+
             set
             {
                 // output mode default to 1 taps, 12 bit depth
@@ -196,7 +196,7 @@ namespace Varocto.Cameras
             }
             set
             {
-                if (value != 0 || value != 1 || value != 2  || value != 3)
+                if (value != 0 || value != 1 || value != 2 || value != 3)
                 {
                     cameraLinkOutputFrequency = value;
                     string cmd = WRITE + BLANK_SPACE + CAMERA_LINK_OUTPUT_FREQUENCY + BLANK_SPACE + value.ToString() + CARRIAGE_RETURN;
@@ -210,7 +210,7 @@ namespace Varocto.Cameras
         {
             get
             {
-                
+
                 return reverseModeEnabled;
             }
             set
@@ -227,8 +227,8 @@ namespace Varocto.Cameras
 
         public override void SetTestPattern(TestPattern testPattern)
         {
-                string cmd = WRITE + BLANK_SPACE + TEST_PATTERN + BLANK_SPACE + testPattern.ToString() + CARRIAGE_RETURN;
-                WriteString(cmd);
+            string cmd = WRITE + BLANK_SPACE + TEST_PATTERN + BLANK_SPACE + testPattern.ToString() + CARRIAGE_RETURN;
+            WriteString(cmd);
         }
 
         public void SetTestPattern(int testPattern)
@@ -243,7 +243,7 @@ namespace Varocto.Cameras
             {
                 string cmd = WRITE + BLANK_SPACE + TEST_IMAGE_HEIGHT + BLANK_SPACE + value.ToString() + CARRIAGE_RETURN;
                 WriteString(cmd);
-           }
+            }
         }
 
 
@@ -314,7 +314,7 @@ namespace Varocto.Cameras
         {
             string cmd = "";
             if (!ExternalModeEnabled && ProgrammableExposureTimeEnabled)
-                cmd = WRITE + BLANK_SPACE + TRIGGER_MODE + BLANK_SPACE  + "0"  + CARRIAGE_RETURN;
+                cmd = WRITE + BLANK_SPACE + TRIGGER_MODE + BLANK_SPACE + "0" + CARRIAGE_RETURN;
             else if (!ExternalModeEnabled && !ProgrammableExposureTimeEnabled)
                 cmd = WRITE + BLANK_SPACE + TRIGGER_MODE + BLANK_SPACE + "1" + CARRIAGE_RETURN;
             else if (ExternalModeEnabled && ProgrammableExposureTimeEnabled)
@@ -381,6 +381,6 @@ namespace Varocto.Cameras
                 throw new IOException("Serial Port is closed.");
             return 0;
         }
-    
+
     }
 }
